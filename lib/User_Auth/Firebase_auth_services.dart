@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FirebaseAuthService{
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<User?> signUpWithEmailAndPassword(String email, String senha,) async {
+  Future<User?> signUpWithEmailAndPassword(String email, String senha) async {
     try {
       UserCredential credential =await _auth.createUserWithEmailAndPassword(email: email, password: senha,);
       return credential.user;
