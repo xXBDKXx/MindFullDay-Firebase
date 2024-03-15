@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "691378528376",
+    "project_id": "mindfullday",
+    "storage_bucket": "mindfullday.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691378528376:android:dd3396b6f80712d4fa0d8d",
+        "android_client_info": {
+          "package_name": "com.example.mindfullday_v1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF5DJ1aT5q6kx00OznID7EwhVH5XsmHjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

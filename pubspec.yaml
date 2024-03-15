@@ -1,0 +1,43 @@
+name: mindfullday_v1
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  firebase_auth: ^4.17.9
+  firebase_core: ^2.27.1
+  flutter:
+    sdk: flutter
+  table_calendar: ^3.1.0
+
+flutter_localizations:
+  sdk: flutter  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/imagens/icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#8696FE"
+
+flutter:
+  uses-material-design: true
+  assets: 
+    - assets\imagens\icon.png
+    - assets\imagens\bg-login.png
+    - assets\imagens\bg-home.png
+    - assets\imagens\logo.png
+    - assets\imagens\sad.png
+    - assets\imagens\angry.png
+    - assets\imagens\happy.png
+    - assets\imagens\shy.png
+
