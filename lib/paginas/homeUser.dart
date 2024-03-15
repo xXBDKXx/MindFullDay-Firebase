@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mindfullday_v1/models/note_model.dart';
 import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
@@ -49,7 +50,7 @@ class _HomeUserState extends State<HomeUser> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Olá, (Usuario)',
+                            Text('Olá, ' /* ${FirebaseAuth.instance.currentUser!.displayName!} */,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,

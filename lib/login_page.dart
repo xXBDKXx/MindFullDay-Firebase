@@ -140,16 +140,40 @@ class _LoginPageState extends State<LoginPage> {
     String email = emailController.text;
     String senha = senhaController.text;
 
+    showDialog(
+        context: context, 
+        builder: (context){
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
     User? user = await _auth.signInWithEmailAndPassword(email, senha);
 
+    Navigator.of(context).pop();
+
     if (user!= null){
-      print("Usuario ");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Home()),
       );
     } else {
-      print("Um erro ocorreu");
+      showDialog(
+        context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Erro'),
+              content: Text('Usuario ou Senha Incorreto!!'),
+              actions: <Widget>[
+              TextButton(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                }, 
+                child: Text('Tentar Novamente'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

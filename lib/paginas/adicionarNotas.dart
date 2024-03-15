@@ -60,6 +60,7 @@ class _AddNotasState extends State<AddNotas> {
         onPressed: () {
           if(titleController.text.isEmpty){
             return;
+            
           }
           if(bodyController.text.isEmpty){
             return;

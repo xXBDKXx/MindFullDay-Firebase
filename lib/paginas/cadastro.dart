@@ -143,7 +143,23 @@ class _CadastroState extends State<Cadastro> {
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
     } else {
-      print("Um erro ocorreu");
+      showDialog(
+        context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Erro'),
+              content: Text('Todos os campos devem ser preechidos'),
+              actions: <Widget>[
+              TextButton(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                }, 
+                child: Text('Tentar Novamente'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }
