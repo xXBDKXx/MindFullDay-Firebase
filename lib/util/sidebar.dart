@@ -22,7 +22,7 @@ class SideBar extends StatelessWidget {
           child: ListView(
             children: [
               UserAccountsDrawerHeader(
-                accountName: Text(''/* FirebaseAuth.instance.currentUser!.displayName! */),
+                accountName: Text('${FirebaseAuth.instance.currentUser!.displayName}'),
                 accountEmail: Text(FirebaseAuth.instance.currentUser!.email! ),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(),

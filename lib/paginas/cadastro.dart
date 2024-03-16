@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, use_build_context_synchronously, prefer_const_constructors_in_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mindfullday_v1/User_auth/firebase_auth_services.dart';
@@ -131,10 +132,16 @@ class _CadastroState extends State<Cadastro> {
     );
   }
   void _signUp() async {
+    String nome = nomeController.text;
     String email = emailController.text;
     String senha = senhaController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, senha);
+    await user?.updateDisplayName(nome);
+    addUserDetails(
+      nome,
+      email,
+    );
 
     if (user!= null){
       print("Usuario ");
@@ -161,5 +168,11 @@ class _CadastroState extends State<Cadastro> {
         },
       );
     }
+  }
+  Future addUserDetails(String nome, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'nome': nome,
+      'email' : email,
+    });
   }
 }

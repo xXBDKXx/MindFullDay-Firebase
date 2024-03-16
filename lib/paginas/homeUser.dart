@@ -15,7 +15,7 @@ class HomeUser extends StatefulWidget {
   State<HomeUser> createState() => _HomeUserState();
 }
 
-class _HomeUserState extends State<HomeUser> {
+class _HomeUserState extends State<HomeUser> {  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +50,7 @@ class _HomeUserState extends State<HomeUser> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Olá, ' /* ${FirebaseAuth.instance.currentUser!.displayName!} */,
+                            Text('Olá, ${FirebaseAuth.instance.currentUser!.displayName}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
