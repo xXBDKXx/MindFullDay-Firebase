@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
 import 'package:mindfullday_v1/util/note_card.dart';
 import 'package:mindfullday_v1/util/note_view.dart';
@@ -44,7 +44,7 @@ class _NotasState extends State<Notas> {
             SizedBox(height: 20.0),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection("notas").snapshots(),
+                stream: FirebaseFirestore.instance.collection("notas").where("Email", isEqualTo: FirebaseAuth.instance.currentUser!.email!).snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
                   if(snapshot.connectionState == ConnectionState.waiting){
                     return Center(

@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
 import 'package:mindfullday_v1/util/tarefas.dart';
 import 'package:mindfullday_v1/util/sidebar.dart';
 
@@ -14,6 +15,7 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {  
+  String data = DateTime.now().toString();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +61,7 @@ class _HomeUserState extends State<HomeUser> {
                               height: 8,
                             ),
                             Text(
-                              '21 Jan 2024',
+                              data,
                               style: TextStyle(color: Colors.deepPurple[100]),
                             )
                           ],
@@ -135,7 +137,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotas()));
                               },
                               child: Image.asset(
                                 'assets/imagens/sad.png',
@@ -157,7 +159,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotas()));
                               },
                               child: Image.asset(
                                 'assets/imagens/happy.png',
@@ -179,7 +181,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotas()));
                               },
                               child: Image.asset(
                                 'assets/imagens/shy.png',
@@ -201,7 +203,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotas()));
                               },
                               child: Image.asset(
                                 'assets/imagens/angry.png',

@@ -23,6 +23,7 @@ Widget noteCard(Function()? onTap, QueryDocumentSnapshot doc) {
               fontSize: 22,
               color: Colors.black,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 4.0),
           Text(
@@ -34,13 +35,13 @@ Widget noteCard(Function()? onTap, QueryDocumentSnapshot doc) {
           ),
           SizedBox(height: 8.0),
           Text(
-              doc["Descrição da Nota"],
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
-              overflow: TextOverflow.ellipsis,
+            doc["Descrição da Nota"],
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
             ),
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     ),

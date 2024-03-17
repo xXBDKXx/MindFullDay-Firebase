@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, file_names, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, file_names, prefer_const_literals_to_create_immutables, avoid_print, invalid_return_type_for_catch_error
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddNotas extends StatefulWidget {
@@ -12,10 +13,10 @@ class AddNotas extends StatefulWidget {
 }
 
 class _AddNotasState extends State<AddNotas> {
+  
   String data = DateTime.now().toString();
   TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,7 @@ class _AddNotasState extends State<AddNotas> {
             "Titulo da Nota": titleController.text,
             "Data de Criação da Nota": data,
             "Descrição da Nota": descController.text,
+            "Email": FirebaseAuth.instance.currentUser!.email!,
           }).then((value) {
             print(value.id);
             Navigator.pop(context);
