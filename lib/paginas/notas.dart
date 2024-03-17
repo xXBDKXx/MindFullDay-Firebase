@@ -1,10 +1,13 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mindfullday_v1/models/note_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
-import 'package:mindfullday_v1/util/sidebar.dart';
 import 'package:mindfullday_v1/util/note_card.dart';
+import 'package:mindfullday_v1/util/note_view.dart';
+import 'package:mindfullday_v1/util/sidebar.dart';
+
 
 class Notas extends StatefulWidget {
   const Notas({super.key});
@@ -15,8 +18,6 @@ class Notas extends StatefulWidget {
 
 class _NotasState extends State<Notas> {
 
-  List<Note> notes = List.empty(growable: true);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,30 +27,53 @@ class _NotasState extends State<Notas> {
         title: Text('Minhas notas'),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index){
-          return NoteCard(note: notes[index], index: index, onNoteDeleted: onNoteDeleted,);
-        }
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Suas notas recentes",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 22
+              ),
+            ),
+            SizedBox(height: 20.0),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("notas").snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(
+                      child: CircularProgressIndicator()
+                    );
+                  }
+                  if(snapshot.hasData){
+                    return GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                    children: snapshot.data!.docs.map((note) => noteCard(() {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(note)));
+                    }, note)).toList(),
+                    );
+                  }
+                  return Text("Você não possui notas", style: TextStyle(color: Colors.white),);
+                }
+              ),
+            )
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddNotas(onNewNoteCreated: onNewNoteCreated,)));
-        },
-        child: Icon(Icons.add),
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotas()));
+        }, 
+        label: Text("Adicionar Nota"),
+        icon: Icon(Icons.add),
       ),
 
     );
   }
 
-  void onNewNoteCreated(Note note){
-    notes.add(note);
-    setState(() {});
-  }
-
-
-  void onNoteDeleted(int index){
-    notes.removeAt(index);
-    setState(() {});
-  }
 }

@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors, file_names
+// ignore_for_file: prefer_const_constructors, file_names, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mindfullday_v1/models/note_model.dart';
 
 class AddNotas extends StatefulWidget {
-  const AddNotas({super.key, required this.onNewNoteCreated});
-
-  final Function(Note) onNewNoteCreated;
+  const AddNotas({super.key});
 
 
   @override
@@ -14,9 +12,9 @@ class AddNotas extends StatefulWidget {
 }
 
 class _AddNotasState extends State<AddNotas> {
-
-  final titleController = TextEditingController();
-  final bodyController = TextEditingController();
+  String data = DateTime.now().toString();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
 
 
   @override
@@ -24,58 +22,60 @@ class _AddNotasState extends State<AddNotas> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(134, 150, 254, 1),
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text("Adicionar Nota"),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: titleController,
-                style: TextStyle(
-                  fontSize: 28,
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Titulo"
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Titulo da Nota'
               ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: bodyController,
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Descrição"
-                ),
+              style: TextStyle(
+                fontSize: 22,
               ),
-            ],
-          ),
-        )
+            ),
+            SizedBox(height: 8),
+            Text(
+              data,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 22),
+            TextField(
+              controller: descController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Descrição da Nota'
+              ),
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if(titleController.text.isEmpty){
-            return ;
-            
-          }
-          if(bodyController.text.isEmpty){
-            return;
-          }
-
-          final note = Note(
-            body: bodyController.text,
-            title: titleController.text,
-          );
-
-          widget.onNewNoteCreated(note);
-          Navigator.of(context).pop();
+        onPressed: () async {
+          FirebaseFirestore.instance.collection("notas").add({
+            "Titulo da Nota": titleController.text,
+            "Data de Criação da Nota": data,
+            "Descrição da Nota": descController.text,
+          }).then((value) {
+            print(value.id);
+            Navigator.pop(context);
+          }).catchError((error) => print("Falha ao Criar a nota $error"));
         },
         child: Icon(Icons.save),
-      )
+      ),
     );
   }
 }

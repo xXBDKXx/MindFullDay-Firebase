@@ -2,8 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mindfullday_v1/models/note_model.dart';
-import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
 import 'package:mindfullday_v1/util/tarefas.dart';
 import 'package:mindfullday_v1/util/sidebar.dart';
 
@@ -137,10 +135,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddNotas(onNewNoteCreated: onNewNoteCreated,)),
-                                );
+                                
                               },
                               child: Image.asset(
                                 'assets/imagens/sad.png',
@@ -162,10 +157,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddNotas(onNewNoteCreated: onNewNoteCreated,)),
-                                );
+                                
                               },
                               child: Image.asset(
                                 'assets/imagens/happy.png',
@@ -187,10 +179,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddNotas(onNewNoteCreated: onNewNoteCreated,)),
-                                );
+                                
                               },
                               child: Image.asset(
                                 'assets/imagens/shy.png',
@@ -212,10 +201,7 @@ class _HomeUserState extends State<HomeUser> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddNotas(onNewNoteCreated: onNewNoteCreated,)),
-                                );
+                                
                               },
                               child: Image.asset(
                                 'assets/imagens/angry.png',
@@ -310,8 +296,5 @@ class _HomeUserState extends State<HomeUser> {
         ),
       ),
     );
-  }
-  void onNewNoteCreated(Note note){
-    setState(() {});
   }
 }

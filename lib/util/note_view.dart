@@ -1,76 +1,57 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mindfullday_v1/models/note_model.dart';
 
-class NoteView extends StatelessWidget {
-  const NoteView({super.key, required this.note, required this.index, required this.onNoteDeleted});
+class NoteView extends StatefulWidget {
+  NoteView(this.doc, {super.key});
+  QueryDocumentSnapshot doc;
 
-  final Note note;
-  final int index;
+  @override
+  State<NoteView> createState() => _NoteViewState();
+}
 
-  final Function(int) onNoteDeleted;
-
+class _NoteViewState extends State<NoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(134, 150, 254, 1),
       appBar: AppBar(
-        title: Text("Editar Nota"),
-        actions: [
-          IconButton(onPressed: (){
-            showDialog(
-              context: context, 
-              builder: (context){
-                return AlertDialog(
-                  title: Text("Deseja Excluir?"),
-                  content: Text("Nota ${note.title} será deletada!"),
-
-                  actions: [
-                    TextButton(
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                        onNoteDeleted(index);
-                        Navigator.of(context).pop();
-                      }, 
-                      child: Text("Excluir")
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      }, 
-                      child: Text("Cancelar")
-                    )
-                  ],
-                );
-              }
-            );
-          }, icon: Icon(Icons.delete))
-        ],
+        backgroundColor: Colors.white,
+        title: Text('Ver Nota'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  note.title,
-                  style: TextStyle(
-                    fontSize: 26,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  note.body,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                )
-              ],
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.doc["Titulo da Nota"],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+                color: Colors.black,
+              ),
             ),
-          )
+            SizedBox(height: 5),
+            Text(
+              widget.doc["Data de Criação da Nota"],
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              widget.doc["Descrição da Nota"],
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }

@@ -1,48 +1,48 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mindfullday_v1/models/note_model.dart';
-import 'package:mindfullday_v1/util/note_view.dart';
 
-class NoteCard extends StatelessWidget {
-  const NoteCard({super.key, required this.note, required this.index, required this.onNoteDeleted});  
-
-  final Note note;
-  final int index;
-
-  final Function(int) onNoteDeleted;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteView(note: note, index: index, onNoteDeleted: onNoteDeleted,)));
-      },
-      child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      note.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Text(
-                      note.body,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
-                ),
-                ),
+Widget noteCard(Function()? onTap, QueryDocumentSnapshot doc) {
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      padding: EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(255, 255, 255, 1),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            doc["Titulo da Nota"],
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
             ),
-    );
-  }
+          ),
+          SizedBox(height: 4.0),
+          Text(
+            doc["Data de Criação da Nota"],
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 8.0),
+          Text(
+              doc["Descrição da Nota"],
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+        ],
+      ),
+    ),
+  );
 }
