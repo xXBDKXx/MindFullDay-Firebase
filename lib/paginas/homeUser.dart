@@ -237,7 +237,7 @@ class _HomeUserState extends State<HomeUser> {
                       return Text('Erro: ${snapshot.error}');
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }
                     return ListView(
                       children: snapshot.data!.docs.map((DocumentSnapshot document) {

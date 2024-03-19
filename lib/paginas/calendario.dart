@@ -73,29 +73,30 @@ class _CalendarioPageState extends State<Calendario> {
   }
 
   _loadFirestoreEvents() async {
-    final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
-    final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
-    _events = {};
+  final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
+  final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
+  _events = {};
 
-    final snap = await FirebaseFirestore.instance
-        .collection('tarefas')
-        .where('Data', isGreaterThanOrEqualTo: firstDay)
-        .where('Data', isLessThanOrEqualTo: lastDay)
-        .withConverter(
-            fromFirestore: Event.fromFirestore,
-            toFirestore: (event, options) => event.toFirestore())
-        .get();
-    for (var doc in snap.docs) {
-      final event = doc.data();
-      final day =
-          DateTime.utc(event.date.year, event.date.month, event.date.day);
-      if (_events[day] == null) {
-        _events[day] = [];
-      }
-      _events[day]!.add(event);
+
+  final snap = await FirebaseFirestore.instance
+      .collection('tarefas')
+      .where('Data', isGreaterThanOrEqualTo: firstDay)
+      .where('Data', isLessThanOrEqualTo: lastDay) // Adiciona filtro pelo email do usuário logado
+      .withConverter(
+          fromFirestore: Event.fromFirestore,
+          toFirestore: (event, options) => event.toFirestore())
+      .get();
+  for (var doc in snap.docs) {
+    final event = doc.data();
+    final day = DateTime.utc(event.date.year, event.date.month, event.date.day);
+    if (_events[day] == null) {
+      _events[day] = [];
     }
-    setState(() {});
+    _events[day]!.add(event);
   }
+  setState(() {});
+}
+
 
   List<Event> _getEventsForTheDay(DateTime day) {
     return _events[day] ?? [];
@@ -174,7 +175,7 @@ class _CalendarioPageState extends State<Calendario> {
               builder: (_) => AddEvent(
                 firstDate: _firstDay,
                 lastDate: _lastDay,
-                selectedDate: _selectedDay,
+                selectedDate: _focusedDay,
               ),
             ),
           );
