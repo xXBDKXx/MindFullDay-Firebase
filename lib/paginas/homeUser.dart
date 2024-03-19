@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mindfullday_v1/paginas/adicionarNotas.dart';
-import 'package:mindfullday_v1/util/tarefas.dart';
+import 'package:mindfullday_v1/util/Tarefas.dart';
 import 'package:mindfullday_v1/util/sidebar.dart';
 
 
@@ -229,70 +230,28 @@ class _HomeUserState extends State<HomeUser> {
                 height: 25,
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 74, 66, 228), borderRadius: BorderRadius.only(
-                      topRight:  Radius.circular(30), 
-                      topLeft: Radius.circular(30)
-                    ),
-                    boxShadow: 
-                    [
-                      BoxShadow(
-                        color: Color.fromARGB(43, 51, 51, 51),
-                        blurRadius: 4,
-                        offset: Offset(0, -8),
-                        spreadRadius: -4,
-                      ),
-                    ],
-                  ), 
-                padding: EdgeInsets.all(25),
-                child: Center(
-                  child: Column(
-                    children: [
-                      // Heading Tarefas
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Tarefas',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      //Lista de Tarefas
-                      Expanded(
-                        child: ListView(
-                          children: [
-                            Tarefas(
-                              icon: Icons.favorite,
-                              nomeTarefa: 'Tarefa 1',
-                              descricaoTarefa: 'Descrição da Tarefa',
-                              color: Colors.lightBlue,
-                            ),
-                            //ola Garden
-                            Tarefas(
-                              icon: Icons.earbuds,
-                              nomeTarefa: 'Tarefa 2',
-                              descricaoTarefa: 'Descrição da Tarefa',
-                              color: Colors.orange,
-                            ),
-                            Tarefas(
-                              icon: Icons.person,
-                              nomeTarefa: 'Tarefa 3',
-                              descricaoTarefa: 'Descrição da Tarefa',
-                              color: Colors.green,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('tarefas').snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Erro: ${snapshot.error}');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    return ListView(
+                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                        return Tarefas(
+                          titulo: data['Titulo'],
+                          descricao: data['Descrição'],
+                          data: (data['Data'] as Timestamp).toDate(),
+                        );
+                      }).toList(),
+                    );
+                  },
                 ),
-              )),
+              ),
             ],
           ),
         ),

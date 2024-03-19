@@ -1,20 +1,18 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_typing_uninitialized_variables
+// ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Tarefas extends StatelessWidget {
-  final icon;
-  final String nomeTarefa;
-  final String descricaoTarefa;
-  final color;
-  
+  final String titulo;
+  final String descricao;
+  final DateTime data;
 
   const Tarefas({
     Key? key,
-    required this.icon,
-    required this.nomeTarefa,
-    required this.descricaoTarefa,
-    required this.color,
+    required this.titulo,
+    required this.descricao,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -24,50 +22,73 @@ class Tarefas extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white, 
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    color: color,
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                    ),
-                  ),
+                // Título
+                Text(
+                  titulo,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
-                SizedBox(
-                  width: 12,
+                SizedBox(height: 4,),
+                // Descrição
+                Text(
+                  descricao,
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 14),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Titulo
-                    Text(
-                      nomeTarefa,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    SizedBox(height: 4,),
-                    //Subtitulo
-                    Text(
-                      descricaoTarefa,
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 14),
-                    ),
-                    
-                  ],
+                SizedBox(height: 4,),
+                // Data
+                Text(
+                  'Data: ${data.day}/${data.month}/${data.year}',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 14),
                 ),
               ],
             ),
             Icon(Icons.more_horiz)
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TarefasPage extends StatelessWidget {
+  const TarefasPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tarefas'),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('tarefas').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Erro: ${snapshot.error}');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              return Tarefas(
+                titulo: data['Titulo'],
+                descricao: data['Descrição'],
+                data: (data['Data'] as Timestamp).toDate(),
+              );
+            }).toList(),
+          );
+        },
       ),
     );
   }
