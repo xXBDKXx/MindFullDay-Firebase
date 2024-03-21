@@ -170,9 +170,19 @@ class _CadastroState extends State<Cadastro> {
     }
   }
   Future addUserDetails(String nome, String email) async {
+
+    showDialog(
+        context: context, 
+        builder: (context){
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
     await FirebaseFirestore.instance.collection('users').add({
       'nome': nome,
       'email' : email,
     });
+
+    Navigator.of(context).pop();
   }
 }

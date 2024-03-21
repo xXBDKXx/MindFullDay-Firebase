@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mindfullday_v1/login_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-// import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 Future main() async {
@@ -21,15 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MindFullDay',
-      theme: ThemeData(primarySwatch: Colors.amber),
       home: LoginPage(),
-     /*  localizationsDelegates: [
-        GlobalKey.delegate; // Enables the use of Flutter'
-      ],
-       supportedLocales: [
-         const Locale('en'),
-         const Locale('fr')
-       ], */
     );
   }
 }
