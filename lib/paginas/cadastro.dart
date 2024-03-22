@@ -136,12 +136,21 @@ class _CadastroState extends State<Cadastro> {
     String email = emailController.text;
     String senha = senhaController.text;
 
+    showDialog(
+        context: context, 
+        builder: (context){
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
     User? user = await _auth.signUpWithEmailAndPassword(email, senha);
     await user?.updateDisplayName(nome);
     addUserDetails(
       nome,
       email,
     );
+
+    Navigator.of(context).pop();
 
     if (user!= null){
       print("Usuario ");
@@ -170,19 +179,9 @@ class _CadastroState extends State<Cadastro> {
     }
   }
   Future addUserDetails(String nome, String email) async {
-
-    showDialog(
-        context: context, 
-        builder: (context){
-          return Center(child: CircularProgressIndicator());
-        },
-      );
-
     await FirebaseFirestore.instance.collection('users').add({
       'nome': nome,
       'email' : email,
     });
-
-    Navigator.of(context).pop();
   }
 }
