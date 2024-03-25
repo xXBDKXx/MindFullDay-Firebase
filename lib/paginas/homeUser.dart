@@ -231,7 +231,9 @@ class _HomeUserState extends State<HomeUser> {
               ),
               Expanded(
                 child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection('tarefas').snapshots(),
+                  stream: FirebaseFirestore.instance.collection('tarefas')
+                  .where('Email', isEqualTo: FirebaseAuth.instance.currentUser!.email!)
+                  .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
                       return Text('Erro: ${snapshot.error}');

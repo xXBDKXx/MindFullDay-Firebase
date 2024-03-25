@@ -2,6 +2,7 @@
 
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mindfullday_v1/util/sidebar.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -11,11 +12,13 @@ class Event {
   final String? description;
   final DateTime date;
   final String id;
+  final String email;
   Event({
     required this.title,
     this.description,
     required this.date,
     required this.id,
+    required this.email,
   });
 
   factory Event.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -25,7 +28,8 @@ class Event {
       date: data['Data'].toDate(),
       title: data['Titulo'],
       description: data['Descrição'],
-      id: snapshot.id,
+      id: snapshot.id, 
+      email: data['Email'],
     );
   }
 
@@ -73,15 +77,13 @@ class _CalendarioPageState extends State<Calendario> {
   }
 
   _loadFirestoreEvents() async {
-  final firstDay = DateTime(_focusedDay.year, _focusedDay.month, 1);
-  final lastDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
   _events = {};
 
+  final userEmail = FirebaseAuth.instance.currentUser!.email!;
 
   final snap = await FirebaseFirestore.instance
       .collection('tarefas')
-      .where('Data', isGreaterThanOrEqualTo: firstDay)
-      .where('Data', isLessThanOrEqualTo: lastDay) // Adiciona filtro pelo email do usuário logado
+      .where('Email', isEqualTo: userEmail) // Add this line to filter by email
       .withConverter(
           fromFirestore: Event.fromFirestore,
           toFirestore: (event, options) => event.toFirestore())
@@ -264,6 +266,7 @@ class _AddEventState extends State<AddEvent> {
       "Titulo": title,
       "Descrição": description,
       "Data": Timestamp.fromDate(_selectedDate),
+      "Email": FirebaseAuth.instance.currentUser!.email!,
     });
     if (mounted) {
       Navigator.pop<bool>(context, true);

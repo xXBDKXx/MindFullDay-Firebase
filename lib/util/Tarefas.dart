@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,6 +15,7 @@ class Tarefas extends StatelessWidget {
     required this.descricao,
     required this.data,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,9 @@ class TarefasPage extends StatelessWidget {
         title: Text('Tarefas'),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('tarefas').snapshots(),
+        stream: FirebaseFirestore.instance.collection('tarefas')
+        .where('Email', isEqualTo: FirebaseAuth.instance.currentUser!.email!)
+        .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Erro: ${snapshot.error}');
